@@ -94,8 +94,13 @@ export default{
     //     duration: 1000
     //   });
     // }
-    return new Promise(resolve => {
-      resolve(res.data);
+    return new Promise((resolve,reject) => {
+      if(res.status !== 404){
+        resolve(res.data);
+      }else{
+        reject('没有网络');
+      }
+      
     });
   },
   isMobile(mobile){
