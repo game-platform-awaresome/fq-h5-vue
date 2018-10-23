@@ -7,7 +7,7 @@ $(function(){
     if ($(window).height() < oHeight) {
       $(".tab").css("position", "static");
     } else {
-      $(".tab").css("position", "fixed");
+      $(".tab").css("position", "absolute");
     }
   });
 });
@@ -20,7 +20,7 @@ import http from 'service/http.js';
 import { Toast } from 'mint-ui';
 export default{
 
-    domain: Object.is(process.env.NODE_ENV, 'production') ? "http://"+document.domain+"/h5?v=3#" : "http://vue.feihuo.com#",
+    domain: Object.is(process.env.NODE_ENV, 'production') ? "http://"+document.domain+"/h5?v=210#" : "http://vue.feihuo.com:8080/#",
     goGameUrl: "http://"+document.domain+"/h5/play",
     /*  
     跳转外部打开游戏统一接口
@@ -77,8 +77,8 @@ export default{
          type: 2,
          returnUrl: encodeURI(store.state.currentPath)
        }).then(e => {
-        store.commit('changeshow');
-        store.commit('changeLogin');
+        // store.commit('changeshow');
+        // store.commit('changeLogin');
         location.href = e.data;
        });
      }
@@ -117,5 +117,159 @@ export default{
     str = str.replace(/\n[\s| | ]*\r/g,'\n'); //去除多余空行
     str=str.replace(/ /ig,'');//去掉空格
     return str;
+  },
+  /**
+   * 设置cookie
+   * 
+   * @param {any} name cookie的名称
+   * @param {any} value cookie的值
+   * @param {any} day cookie的过期时间
+   */
+  setCookie: function(name, value, day=0){
+    if(day !== 0){     //当设置的时间等于0时，不设置expires属性，cookie在浏览器关闭后删除
+      var expires = day * 24 * 60 * 60 * 1000;
+      var date = new Date(+new Date()+expires);
+      document.cookie = name + "=" + escape(value) + ";expires=" + date.toUTCString();
+    }else{
+      document.cookie = name + "=" + escape(value);
+    }
+  },
+  /**
+   * 获取对应名称的cookie
+   * @param name cookie的名称
+   * @returns {null} 不存在时，返回null
+   */
+  getCookie: function (name) {
+    var arr;
+    var reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+    if (arr = document.cookie.match(reg))
+      return unescape(arr[2]);
+    else
+      return null;
+  },
+  /**
+   * 删除cookie
+   * @param name cookie的名称
+   */
+  delCookie: function (name) {
+    this.setCookie(name, ' ', -1);
+  },
+  /**
+   * 数据上报接口
+   * 
+   * @param {any} event 是	string	事件标识，英文字符串，由产品提供
+   * @param {any} event_desc 是	string	时间描述
+   * @param {any} game_id 否	int	关联游戏id
+   */
+  uploadData: function(event,event_desc,game_id){
+    let data;
+    if(game_id){
+      data = {
+        event,
+        event_desc,
+        game_id
+      }
+    }else{
+      data = {
+        event,
+        event_desc
+      }
+    }
+    
+    this.fetchData(api.uploadData,data).then((e)=>{
+      // console.log(e);
+    })
+  },
+  /**
+   * 使用fuzzyQuery方法实现模糊查询
+   * 
+   * @param {any} list  原数组
+   * @param {any} key 查询的字段
+   * @param {any} keyWord  查询的关键词
+   * @returns  查询的结果
+   */
+  fuzzyQuery: function (list ,key, keyWord) {
+    if (!Array.isArray(list) && keyWord === '') return
+    var reg = new RegExp(keyWord,'i');//i不区分大小写
+    var arr = [];
+    for (var i = 0; i < list.length; i++) {
+      for(let j = 0; j < key.length; j++) {
+        if (reg.test(list[i][key[j]])) {
+          arr.push(list[i]);
+          break;
+        }
+      }
+    }
+    return new Promise((resolve, reject)=>{
+      resolve(arr);
+    });
+  },
+  /**
+   * 检测是否为中文，true表示是中文，false表示非中文
+   * 
+   * @param {any} str 
+   * @returns 
+   */
+  isChinese: function(str){
+    if(/^[\u4e00-\u9fa5]+$/.test(str)){
+        return true;
+    }else{
+        return false;
+    }
+  },
+/**
+ * 数据上报
+ * 
+ * @param {any} event 传入事件
+ * @returns 返回对应的详情
+ */
+getEventDesc: function(event){
+    switch(event){
+      case 'recPlay':
+        return '最近在玩';
+      case 'hotGames':
+        return '最多人玩';
+      case 'newGames':
+        return '最新游戏';
+      case 'newServer':
+        return '火爆新服';
+      case 'openServer':
+        return '即将开服';
+      case 'gamesInfo':
+        return '游戏专题';
+      case 'iconSubjectInfo':
+        return '精选推荐';
+      case 'gamesInfo':
+        return '游戏专题';
+      case 'focusRecInfo':
+        return '轮播专题';
+    }
+  },
+  /**
+   * 设置localstroge
+   * 
+   * @param {any} name 
+   * @param {any} value 
+   */
+  setLocalStroge: function(name,value){
+    localStorage.setItem(name,value);
+  },
+/**
+ * 获取localstroge
+ * 
+ * @param {any} name 
+ * @returns 
+ */
+getLocalStroge: function(name) {
+    return localStorage.getItem(name);
+  },
+/**
+ * 删除localstroge
+ * 
+ * @param {any} name 
+ */
+removeLocalStroge: function(name){
+    localStorage.removeItem(name);
   }
+
 }

@@ -8,7 +8,7 @@
     <ul class="mauto">
         <li v-for="(item,index) in obj" :bb1="index==obj.length-1 ? '' : 'bb1'">
             <img class="num123" :src="require('img/num'+(index+1)+'.png')" alt="">
-            <item2 :item="item" :type="type === 1 ? 'newGames'+index:'hotGames'+index"></item2>
+            <item2 :item="item" :type="type === 1 ? {'event':'newGames','index':index} : {'event':'hotGames','index':index}"></item2>
         </li>
     </ul>
  </div>
@@ -28,9 +28,9 @@ export default {
   methods:{
     push:function(path,query={}){
       if(this.type == 1){
-        MtaH5.clickStat('newGamesAll')
+        this.$fn.uploadData("H5WeChatHall_newGamesAll_click","公众号大厅-最新游戏全部");
       }else{
-        MtaH5.clickStat('hotGamesAll')
+        this.$fn.uploadData("H5WeChatHall_hotGamesAll_click","公众号大厅-最多人玩全部");
       }
       router.push({path:path,query:query});
     },
@@ -55,12 +55,15 @@ ul {
 li {
   padding: 20px 0;
   zoom: 1;
+  &[bb1=""]{
+    padding-bottom: 0;
+  }
   &[bb1="bb1"] {
     position: relative;
     &::before {
       position: absolute;
       content: "";
-      width: 530px;
+      width: 500px;
       right: 0;
       bottom: 0;
       border-top: 1px solid #ebebeb;

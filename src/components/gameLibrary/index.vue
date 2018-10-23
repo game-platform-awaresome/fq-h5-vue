@@ -3,7 +3,7 @@
      <div class="header">
        <div class="search" @click="push('search')">
         <div class="searchbox">
-        <input type="text" placeholder="搜索游戏" class="searchinput">
+        <input type="text" :placeholder="$store.state.searchAdvText" class="searchinput">
         <img src="../../assets/img/search.png" class="searchimg" alt="">
         </div>
     </div>
@@ -11,27 +11,27 @@
         <div class="tab">
             <div class="tab-content">
                 <ul class="clearfix">
-                    <li class="fl" :class="imgflag[0] ? 'active' : ''" @click="tab(0,1)">
+                    <li class="fl" :class="imgflag[0] ? 'active' : ''" @click="tab(0,1,{'event':'homeCategory1','event_desc':'角色扮演分类'})">
                         <img v-show="imgflag[0]" src="../../assets/img/rolemh.png" alt="">
                         <img v-show="!imgflag[0]" src="../../assets/img/rolem.png" alt="">
                         <span>角色</span>
                     </li>
-                    <li class="fl" :class="imgflag[1] ? 'active' : ''" @click="tab(1,3)">
+                    <li class="fl" :class="imgflag[1] ? 'active' : ''" @click="tab(1,3,{'event':'homeCategory3','event_desc':'模拟经营分类'})">
                         <img v-show="imgflag[1]" src="../../assets/img/simulationmh.png" alt="">
                         <img v-show="!imgflag[1]" src="../../assets/img/simulationm.png" alt="">
                         <span>模拟</span>
                     </li>
-                    <li class="fl" :class="imgflag[2] ? 'active' : ''" @click="tab(2,4)">
+                    <li class="fl" :class="imgflag[2] ? 'active' : ''" @click="tab(2,4,{'event':'homeCategory4','event_desc':'休闲竞技分类'})">
                         <img v-show="imgflag[2]" src="../../assets/img/leisuremh.png" alt="">
                         <img v-show="!imgflag[2]" src="../../assets/img/leisurem.png" alt="">
                         <span>休闲</span>
                     </li>
-                    <li class="fl" :class="imgflag[3] ? 'active' : ''" @click="tab(3,5)">
+                    <li class="fl" :class="imgflag[3] ? 'active' : ''" @click="tab(3,5,{'event':'homeCategory5','event_desc':'放置挂机分类'})">
                         <img v-show="imgflag[3]" src="../../assets/img/placemh.png" alt="">
                         <img v-show="!imgflag[3]" src="../../assets/img/placem.png" alt="">
                         <span>放置</span>
                     </li>
-                    <li class="fl" :class="imgflag[4] ? 'active' : ''" @click="tab(4,2)">
+                    <li class="fl" :class="imgflag[4] ? 'active' : ''" @click="tab(4,2,{'event':'homeCategory2','event_desc':'战争策略分类'})">
                         <img v-show="imgflag[4]" src="../../assets/img/strategymh.png" alt="">
                         <img v-show="!imgflag[4]" src="../../assets/img/strategym.png" alt="">
                         <span>策略</span>
@@ -41,8 +41,9 @@
         </div>
      </div>
 
-    <keep-alive>
+    
         <div class="list-box mauto">
+            <keep-alive>
             <mt-loadmore  
             :bottom-method="loadBottom" 
             :bottom-all-loaded="allLoaded[type]" 
@@ -59,8 +60,9 @@
                     <span><img src="../../assets/img/loading.gif" alt=""></span>
                 </div>
             </mt-loadmore>
+            </keep-alive>
         </div>
-   </keep-alive>
+   
 
    <!-- <div class="list-box mauto" v-show="imgflag[0]">
         <mt-loadmore  
@@ -239,7 +241,7 @@ export default {
                 resolve(res.data.data);
             });
         },
-        tab: function(index,type){
+        tab: function(index,type, uploadDataParams=null){
             if(!this.imgflag[index]){
                 // this.imgflag.forEach((item,i)=>{
                 //   this.imgflag[i] = i ==index ? true: false; 
@@ -254,10 +256,15 @@ export default {
                 }
                 this.$refs.loadmore.onBottomLoaded();
                 location.replace(location.href.substring(0,location.href.length-1)+type);
+                if(uploadDataParams){
+                    this.$fn.uploadData("H5WeChatHall_"+uploadDataParams.event,"公众号大厅-"+uploadDataParams.event_desc);
+                }
             }
         },
         push:function(path){
-            if(path === 'search') MtaH5.clickStat("eventSearch")
+            if(path === 'search'){
+                this.$fn.uploadData('H5WeChatHall_eventSearch_click','公众号大厅-游戏库搜索点击');
+            }
             router.push(path);
         },
         firstData: async function(){

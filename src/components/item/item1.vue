@@ -19,8 +19,8 @@ export default {
     props:{
         item:Object,
         type:{
-            type:String,
-            default:''
+            type:Object,
+            default:null
         }
     },
   data() {
@@ -37,14 +37,27 @@ export default {
   },
   methods:{
       open:function(val){
-          if(this.type!=='') MtaH5.clickStat(this.type+"start")
+          if(this.type) {
+              if(this.type.event === 'infoRecommend'){
+                this.$fn.uploadData("H5WeChatHall_"+this.type.event+this.item.slug+"_start","公众号大厅-资讯游戏推荐"+this.item.name+"开始");
+              }else{
+                this.$fn.uploadData("H5WeChatHall_"+this.type.event+this.type.index+"_start","公众号大厅-"+this.$fn.getEventDesc(this.type.event)+this.type.index+"开始");
+              }
+          }
+          
           fn.openurlW(this.$fn.goGameUrl+"?gameId="+val,1);
       },
       hasKey:function(obj,key){
           return obj.hasOwnProperty(key) ? obj.key : '';
       },
       push:function(path,query={}){
-          if(this.type!=='') MtaH5.clickStat(this.type+"detail")
+          if(this.type) {
+              if(this.type.event === 'infoRecommend'){
+                this.$fn.uploadData("H5WeChatHall_"+this.type.event+this.item.slug+"_detail","公众号大厅-资讯游戏推荐"+this.item.name+"详情");
+              }else{
+               this.$fn.uploadData("H5WeChatHall_"+this.type.event+this.type.index+"_detail","公众号大厅-"+this.$fn.getEventDesc(this.type.event)+this.type.index+"详情");
+              }
+          }
           router.push({path:path,query:query});
       }
   }

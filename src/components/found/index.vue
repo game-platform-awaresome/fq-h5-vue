@@ -52,6 +52,7 @@ import { swiper, swiperSlide } from "vue-awesome-swiper";
        this.data.res = e.data;
        this.data.loading = true;
      });
+     this.$fn.uploadData('H5WeChatHall_eventFound_visit','公众号大厅-发现页PV');
    },
   computed: {
     swiper() {
@@ -60,7 +61,7 @@ import { swiper, swiperSlide } from "vue-awesome-swiper";
   },
   methods:{
     open(val,index){
-       MtaH5.clickStat("eventRecommend"+index)
+      this.$fn.uploadData('H5WeChatHall_eventRecommend'+index+'_click','公众号大厅-活动'+index+'点击');
       this.$fn.openurlW(val);
     }
   }
@@ -77,10 +78,14 @@ import { swiper, swiperSlide } from "vue-awesome-swiper";
 .found{
   height: 100%;
   box-sizing: border-box;
+  position: relative;
+   overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling : touch;
 }
 .found-content{
-  height: 100%;
-  position: relative;
+  // height: 100%;
+  
 }
 .title {
   color: #333333;

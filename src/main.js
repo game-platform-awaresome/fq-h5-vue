@@ -5,10 +5,11 @@ import App from './App'
 import router from './router'
 Vue.prototype.router = router;
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
+Vue.config.devtools = Object.is(process.env.NODE_ENV, 'development');
 
 // 引入mint-ui
-import MintUI from 'mint-ui';
+import { Lazyload  } from 'mint-ui';
 
 // 引入初始化样式
 import  'style/index.less';
@@ -17,13 +18,12 @@ import  'style/index.less';
 import 'lib-flexible';
 
 // 插件 图片加载以及加载失败
-Vue.use(MintUI, {
-  lazyload: {
-    preLoad: 1.3,
+Vue.use(Lazyload , {
+    preLoad: 2,
     error: require('img/fail.png'),
     loading: require('img/default.png'),
     attempt: 1,
-  }
+  
 });
 
 // 引入jq
@@ -31,12 +31,13 @@ import $ from 'jquery';
 // 引入自己的js
 import fn from 'js/main.js';
 Vue.prototype.$fn = fn;
+require('js/jquery.easing.js');
+require('js/uploadData.js');
 // 引入swiper
 import VueAwesomeSwiper from 'vue-awesome-swiper'
 import 'swiper/dist/css/swiper.css'
-require('js/jquery.easing.js');
 // 引入mockjs
-process.env.MOCK && require('@/util/mock');
+// process.env.MOCK && require('@/util/mock');
 
 // 引入复制粘贴插件
 import VueClipboard from 'vue-clipboard2'

@@ -7,7 +7,7 @@
     </div>
     <ul class="mauto">
         <li v-for="(item,index) in obj.relGamesInfo.list.slice(0,3)" :bb1="index===2 ? '' : 'bb1'">
-            <item1 :item="item"></item1>
+            <item1 :item="item" :type="{'event':type,'index':index}" ></item1>
         </li>
     </ul>
  </div>
@@ -17,7 +17,7 @@
 import item1 from "components/item/item1.vue";
 import router from 'router';
 export default {
-  props: ["obj"],
+  props: ["obj","type"],
   data() {
     return {};
   },
@@ -26,6 +26,8 @@ export default {
   },
   methods:{
     push:function(path,query={}){
+        if(path === 'gameList')
+          this.$fn.uploadData("H5WeChatHall_"+this.type+"All_click","公众号大厅-"+this.$fn.getEventDesc(this.type)+"全部");
         router.push({path:path,query:query});
     },
   }
@@ -48,6 +50,9 @@ ul{
 }
 li {
     padding: 20px 0;
+    &[bb1=""]{
+      padding-bottom: 0;
+    }
   &[bb1="bb1"] {
     position: relative;
     &::after {

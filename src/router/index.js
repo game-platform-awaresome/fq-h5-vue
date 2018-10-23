@@ -1,25 +1,51 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import index from '@/components/index';
-import home from '@/components/home/index';//首页
-import more from '@/components/more/index';//更多
-import found from '@/components/found/index';//发现
-import detail from '@/components/detail/index';//详情
-import gameLibrary from '@/components/gameLibrary/index';//游戏库
-import search from '@/components/search/index';//搜索
+// import index from '@/components/index';
+// import home from '@/components/home/index';//首页
+// import more from '@/components/more/index';//更多
+// import found from '@/components/found/index';//发现
+// import detail from '@/components/detail/index';//详情
+// import gameLibrary from '@/components/gameLibrary/index';//游戏库
+// import search from '@/components/search/index';//搜索
 import error from '@/components/comm/404.vue';//联网失败
-import personalCenter from '@/components/more/personalCenter/index.vue';//个人中心
-import rna from '@/components/more/personalCenter/rna.vue';//实名认证
-import phone from '@/components/more/personalCenter/phone.vue';//手机绑定
-import register from '@/components/comm/register/index.vue';//注册
-import login from '@/components/comm/login/index.vue';//登录
-// import login1 from '@/components/comm/login/login1.vue';//登录
-import voucher from '@/components/more/voucher.vue';//代金券
-import taskCenter from '@/components/more/taskCenter.vue';//任务中心
-import invite from '@/components/comm/invite.vue';//邀请页面
-import gameList from '@/components/gameList/index.vue';//游戏列表页面
-import articleList from '@/components/articleList/index.vue';//文章列表页面
-import articleDetail from '@/components/articleDetail/index.vue';//文章详情页面
+// import personalCenter from '@/components/more/personalCenter/index.vue';//个人中心
+// import rna from '@/components/more/personalCenter/rna.vue';//实名认证
+// import phone from '@/components/more/personalCenter/phone.vue';//手机绑定
+// import register from '@/components/comm/register/index.vue';//注册
+// import login from '@/components/comm/login/index.vue';//登录
+//! import login1 from '@/components/comm/login/login1.vue';//登录
+// import voucher from '@/components/more/voucher.vue';//代金券
+// import taskCenter from '@/components/more/taskCenter.vue';//任务中心
+// import invite from '@/components/comm/invite.vue';//邀请页面
+// import gameList from '@/components/gameList/index.vue';//游戏列表页面
+// import articleList from '@/components/articleList/index.vue';//文章列表页面
+// import articleDetail from '@/components/articleDetail/index.vue';//文章详情页面
+// import openService from '@/components/openService/index';//开服页面
+// import inforList from '@/components/inforList/index';//资讯列表
+// import inforDetail from '@/components/inforDetail/index';//资讯详情
+
+
+const index = () => import(/* webpackChunkName: "index" */ '@/components/index')
+const home = () => import(/* webpackChunkName: "home" */ '@/components/home/index')
+const more = () => import(/* webpackChunkName: "more" */ '@/components/more/index')
+const found = () => import(/* webpackChunkName: "found" */ '@/components/found/index')
+const detail = () => import(/* webpackChunkName: "detail" */ '@/components/detail/index')
+const gameLibrary = () => import(/* webpackChunkName: "gameLibrary" */ '@/components/gameLibrary/index')
+const search = () => import(/* webpackChunkName: "search" */ '@/components/search/index')
+const personalCenter = () => import(/* webpackChunkName: "personalCenter" */ '@/components/more/personalCenter/index.vue')
+const rna = () => import(/* webpackChunkName: "search" */ '@/components/more/personalCenter/rna.vue')
+const phone = () => import(/* webpackChunkName: "search" */ '@/components/more/personalCenter/phone.vue')
+const register = () => import(/* webpackChunkName: "search" */ '@/components/comm/register/index.vue')
+const login = () => import(/* webpackChunkName: "search" */ '@/components/comm/login/index.vue')
+const voucher = () => import(/* webpackChunkName: "search" */ '@/components/more/voucher.vue')
+const taskCenter = () => import(/* webpackChunkName: "search" */ '@/components/more/taskCenter.vue')
+const invite = () => import(/* webpackChunkName: "more" */ '@/components/comm/invite.vue')
+const gameList = () => import(/* webpackChunkName: "more" */ '@/components/gameList/index.vue')
+// const articleList = () => import(/* webpackChunkName: "more" */ '@/components/articleList/index.vue')
+// const articleDetail = () => import(/* webpackChunkName: "more" */ '@/components/articleDetail/index.vue')
+const openService = () => import(/* webpackChunkName: "more" */ '@/components/openService/index.vue')
+const inforList = () => import(/* webpackChunkName: "more" */ '@/components/inforList/index.vue')
+const inforDetail = () => import(/* webpackChunkName: "more" */ '@/components/inforDetail/index.vue')
 
 
 import store from '../store';
@@ -66,6 +92,12 @@ const route = new Router({
           path: '/found',
           name: '发现',
           component: found,
+          meta:{ keepAlive: true }
+        },
+        {
+          path: '/openService',
+          name: '开服',
+          component: openService,
           meta:{ keepAlive: true }
         }
       ],
@@ -201,17 +233,30 @@ const route = new Router({
       component: gameList,
       meta:{ keepAlive: false }
     },
+    // {
+    //   path: '/articleList',
+    //   name: '相关文章',
+    //   component: articleList,
+    //   meta:{ keepAlive: false }
+    // }
+    // ,
+    // {
+    //   path: '/articleDetail',
+    //   name: '相关文章',
+    //   component: articleDetail,
+    //   meta:{ keepAlive: false }
+    // },
     {
-      path: '/articleList',
-      name: '相关文章',
-      component: articleList,
+      path: '/inforList',
+      name: '飞火资讯',
+      component: inforList,
       meta:{ keepAlive: false }
     }
     ,
     {
-      path: '/articleDetail',
-      name: '相关文章',
-      component: articleDetail,
+      path: '/inforDetail',
+      name: '飞火资讯',
+      component: inforDetail,
       meta:{ keepAlive: false }
     }
   ]

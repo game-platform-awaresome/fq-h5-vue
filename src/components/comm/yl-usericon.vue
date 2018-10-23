@@ -4,6 +4,7 @@
         <img v-lazy="obj.headImgUrl" alt="">
     </div>
     <div class="username">{{obj.userName}}</div>
+    <div class="id">ID:{{obj.uid}}</div>
     <div class="phone">{{obj.hasSafeMobile ? '已绑定手机号'+tophone(obj.mobile) : '绑定手机以保护您的账号'}}</div>
 </div>
 </template>
@@ -42,6 +43,12 @@ import fn from 'js/main.js';
     font-size: 32px;
   }
   .phone {
+    text-align: center;
+    color: #999999;
+    font-size: 24px;
+  }
+  .id{
+     margin: 20px auto;
     text-align: center;
     color: #999999;
     font-size: 24px;

@@ -31,28 +31,28 @@
         <img class="right fr" src="../../assets/img/right.png" alt="">
         <div class="txt3 fr"><div>5元</div>红包无限领取</div>
       </li>
-       <li class="clearfix" @click="$fn.openurlW('https://youka.qiyukf.com/client?k=93a4c1e924bc3d18671f85c670bfd176&wp=1&robotShuntSwitch=0')">
+       <li class="clearfix" @click="openurlW('https://youka.qiyukf.com/client?k=93a4c1e924bc3d18671f85c670bfd176&wp=1&robotShuntSwitch=0','customerService_click','在线客服')">
         <img class="fl icon" src="../../assets/img/alist-icon3.png" alt="">
         <div class="txt fl">
           <div class="txt1">在线客服</div>
         </div>
         <img class="right fr" src="../../assets/img/right.png" alt="">
       </li>
-       <li class="clearfix" @click="$fn.openurlW('https://qm.qq.com/cgi-bin/qm/qr?k=JHZcFQrBXsriI4u7t9GTX_XqvtMJgCjK')">
+       <li class="clearfix" @click="openurlW('https://qm.qq.com/cgi-bin/qm/qr?k=JHZcFQrBXsriI4u7t9GTX_XqvtMJgCjK','QQ_click','一键加群')">
         <img class="fl icon" src="../../assets/img/alist-icon4.png" alt="">
         <div class="txt fl">
           <div class="txt1">一键加群</div>
         </div>
         <img class="right fr" src="../../assets/img/right.png" alt="">
       </li>
-       <li class="clearfix" @click="show = !show">
+       <li class="clearfix" @click="showEwm">
         <img class="fl icon" src="../../assets/img/alist-icon5.png" alt="">
         <div class="txt fl">
           <div class="txt1">关注微信公众号</div>
         </div>
         <img class="right fr" src="../../assets/img/right.png" alt="">
       </li>
-       <li class="clearfix" @click="$fn.openurlW('http://read.feihuo.com')" v-if="false">
+       <li class="clearfix" @click="openurlW('http://read.feihuo.com')" v-if="false">
         <img class="fl icon" src="../../assets/img/alist-icon6.png" alt="">
         <div class="txt fl">
           <div class="txt1">免费小说</div>
@@ -104,7 +104,20 @@ export default {
       });
     },
     push: function(path, query = {}) {
+      if(path === 'personalCenter') {
+        this.$fn.uploadData('H5WeChatHall_user_click','公众号大厅-用户信息');
+      }
       router.push({ path: path, query: query });
+    },
+    openurlW: function(url,event,event_desc){
+      if(event){
+        this.$fn.uploadData('H5WeChatHall_'+event,'公众号大厅-'+event_desc);
+      }
+      this.$fn.openurlW(url);
+    },
+    showEwm: function(){
+      this.$fn.uploadData('H5WeChatHall_follow_click','公众号大厅-关注公众号');
+      this.show = true;
     }
   },
   created: function() {
@@ -112,6 +125,7 @@ export default {
       // console.log(e);
       this.data = e;
     });
+    this.$fn.uploadData('H5WeChatHall_eventMore_visit','公众号大厅-更多页PV');
   }
 };
 </script>
@@ -120,7 +134,7 @@ export default {
 @import "../../assets/style/class.less";
 @import "../../assets/style/mixin.less";
 .content {
-  height: 100%;
+  min-height: 100%;
   box-sizing: border-box;
   background: @bg1;
 }

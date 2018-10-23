@@ -42,8 +42,7 @@ function checkCode (res) {
     // alert(res.msg)
     store.commit('setCurrentPath',location.href);
     router.push('404');
-  }
-  if (res.data.hasOwnProperty('success') && (!res.data.success)) {//res.code != 2礼包已领过  && res.data.code != 2
+  }else if (res.data.hasOwnProperty('success') && (!res.data.success)) {//res.code != 2礼包已领过  && res.data.code != 2
     Toast({
       message: res.data.msg,
       position: 'middle',
@@ -63,7 +62,7 @@ export default {
       timeout: 20000,
       headers: {
         'X-Requested-With': 'XMLHttpRequest',
-        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
       },
       withCredentials: true // 允许携带cookie
     }).then(

@@ -9,7 +9,7 @@
     <!-- slides -->
     <swiper-slide v-for="(item,index) in obj.relGamesInfo.list" :key="index" @click.native="push('detail',{'gameId':item.id,'gameName':item.name},index)" >
      <div class="">
-      <item1 class="item1" :item="item" :type="type+index"></item1>
+      <item1 class="item1" :item="item" :type="{'event':type,'index':index}"></item1>
       <ul class="clearfix">
         <li class="fl" v-for="i in item.base_screen_pic.slice(0,3)">
           <div class="imgbox ">
@@ -58,8 +58,10 @@ export default {
   },
   methods:{
     push:function(path,query={},index){
-      if(path == 'gameList') MtaH5.clickStat(this.type+'All')
-      if(path == 'detail') MtaH5.clickStat(this.type+index+"detail")
+      if(path == 'gameList') 
+       this.$fn.uploadData("H5WeChatHall_"+this.type+"All_click","公众号大厅-"+this.$fn.getEventDesc(this.type)+"全部");
+      if(path == 'detail') 
+       this.$fn.uploadData("H5WeChatHall_"+this.type+index+"_detail","公众号大厅-"+this.$fn.getEventDesc(this.type)+index+"详情");
       router.push({path:path,query:query});
     },
   }

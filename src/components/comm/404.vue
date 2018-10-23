@@ -7,6 +7,7 @@
 </template>
 
 <script type='text/ecmascript-6'>
+import { Indicator } from "mint-ui";
  export default {
    data () {
      return {
@@ -14,12 +15,15 @@
      }
    },
    components: {
-
+       [Indicator.name]: Indicator
    },
    methods:{
        open:function(){
            location.href = this.$store.state.currentPath;
        }
+   },
+   created: function(){
+       Indicator.close();
    }
  }
 </script>

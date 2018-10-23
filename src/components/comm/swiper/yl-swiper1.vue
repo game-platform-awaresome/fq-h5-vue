@@ -49,7 +49,9 @@ export default {
   },
   methods:{
     openUrlW:function(url,type,index){
-      if(this.type!=='') MtaH5.clickStat(this.type+index)
+      if(this.type!=='') {
+         this.$fn.uploadData("H5WeChatHall_"+this.type+index+"_click","公众号大厅-"+this.$fn.getEventDesc(this.type)+index);
+      }
       fn.openurlW(url,type);
     }
   }

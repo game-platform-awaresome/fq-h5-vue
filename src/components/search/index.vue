@@ -1,7 +1,7 @@
 <template>
  <div>
     <div class="search">
-         <yl-search @search="getdata"></yl-search>
+         <yl-search @search="getGameList" @searchFocus="searchFocus" ></yl-search>
     </div>
 
     <div class="search_space" v-if="space">
@@ -37,7 +37,7 @@ import http from "service/http";
 export default {
   data() {
     return {
-      allLoaded: false,
+      allLoaded: true,
       topStatus: "",
       bottomStatus: "drop",
       list: [],
@@ -57,6 +57,14 @@ export default {
     // this.fetchData().then(e => {
     //   this.list = e;
     // });
+    this.$nextTick(function(){
+      if(this.$store.state.gameList === ''){
+        this.$fn.fetchData(this.$api.gameListUrl,{all:1}).then((e)=>{//获取全部游戏列表
+          this.$store.commit('setGameList',e.data);
+        });
+      }
+      this.$fn.uploadData('H5WeChatHall_eventSearch_visit','公众号大厅-搜索页PV');
+    });
   },
   methods: {
     loadBottom: function () { // 加载更多数据的操作
@@ -107,6 +115,26 @@ export default {
             this.pageTotal = Math.ceil(this.total/this.pageSize);//计算出总的页数
         }
       });
+    },
+    getGameList: function(keyWord){
+      let key;
+      if(this.$fn.isChinese(keyWord)){//判读搜索文字是否是中文
+        key = ['name'];
+      }else{
+        key = ['pinyin','slug'];
+      }
+      this.$fn.fuzzyQuery(this.$store.state.gameList,key,keyWord).then((e)=>{//模糊查询
+        this.list =  e;
+        if(this.list.length === 0){
+          this.space = true;
+        }else{
+          this.space = false;
+        }
+      });
+    },
+    searchFocus:function(boole){
+      this.space = boole;
+      this.list = [];
     }
   }
 };
@@ -115,10 +143,10 @@ export default {
 <style scoped lang='less'>
 @import url("../../assets/style/class.less");
 @import url("../../assets/style/mixin.less");
-.search {
-  padding: 20px 0;
-  border-bottom: 1px solid #ebebeb;
-}
+// .search {
+//   padding: 20px 0;
+//   border-bottom: 1px solid #ebebeb;
+// }
 
 .search_space{
   img{

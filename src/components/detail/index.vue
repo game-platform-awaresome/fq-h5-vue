@@ -15,12 +15,12 @@
             </swiper-slide>
         </swiper>
    </div>
-    <div class="f2">
+    <div class="f2" v-if="intro" >
         <div class="title mauto">游戏简介</div>
         <div class="intro mauto" v-html="intro"></div>
         <div class="more mauto" v-if="ellipsis" @click="ell">更多</div>
     </div>
-    <div class="f3">
+    <div class="f3" v-if="data.giftList.list.length > 0">
         <div class="title mauto">礼包</div>
         <ul class="mauto">
             <li class="clearfix" v-for="(gift,index) in data.giftList.list">
@@ -32,19 +32,19 @@
             </li>
         </ul>
     </div>
-    <div class="f4">
+    <div class="f4" v-if="data.articleList.length > 0">
         <div class="mauto clearfix">
             <div class="title fl"> 相关文章</div>
-            <div class="selectAll fr" @click="push('articleList',{'gameId':data.gameInfo.id})">查看全部</div>
+            <div class="selectAll fr" @click="push('inforList',{'type':'5|6','dateFormat':'Y-m-d','gameId':data.gameInfo.id})">查看全部</div>
         </div>
          
             <ul class="mauto">
-                <li class="clearfix" v-for="(item,index) in data.articleList" @click="push('articleDetail',{'article_id':item.article_id})" >
+                <li class="clearfix" v-for="(item,index) in data.articleList" @click="push('inforDetail',{'articleId':item.article_id})" >
                     <div class="fl">
                         <div class="fl type">[{{item.type_name}}]&nbsp;&nbsp;</div>
                         <div class="fl intro">{{item.title}}</div>
                     </div>
-                    <div class="fr time">{{item.create_time}}</div>
+                    <div class="fr time">{{item.create_date}}</div>
                 </li>
             </ul>
     </div>
@@ -143,7 +143,7 @@ export default {
                         this.$set(this.data.giftList.list,index,this.data.giftList.list[index]);
                         MessageBox.confirm('',{
                             title: '礼包码',
-                            message: this.message,
+                            message: `<div>${this.message}</div><div class="gift_code_instructions"><p>使用说明：</p><p>1.复制礼包码至游戏内兑换；2.一个礼包领取码只能兑换一次；3.同一账号只能领取一次同种礼包；4.礼包需在礼包有效期内兑换。</p></div>`,
                             showCancelButton: true,
                             confirmButtonText:"复制",
                             cancelButtonText:"关闭"
@@ -157,7 +157,7 @@ export default {
                 this.message = gift_code;
                     MessageBox.confirm('',{
                     title: '礼包码',
-                    message: this.message,
+                    message: `<div>${this.message}</div><div class="gift_code_instructions"><p>使用说明：</p><p>1.复制礼包码至游戏内兑换；2.一个礼包领取码只能兑换一次；3.同一账号只能领取一次同种礼包；4.礼包需在礼包有效期内兑换。</p></div>`,
                     showCancelButton: true,
                     confirmButtonText:"复制",
                     cancelButtonText:"关闭"
@@ -296,7 +296,7 @@ export default {
         color:#bbbbbb;
         font-size: 30px;
         .ellipsis;
-        width: 450px;
+        width: 420px;
     }
     .time{
         color:#bbbbbb;

@@ -1,6 +1,6 @@
 <template>
- <div v-html="data" class="content">
-
+ <div  class="main">
+     <div class="content" v-html="data"></div>
  </div>
 </template>
 
@@ -36,9 +36,12 @@ import http from 'service/http.js';
 
 <style scoped lang='less'>
 @import url("../../assets/style/mixin.less");
-.content{
+.main{
     width: @wauto;
     margin: 0 auto;
+}
+img{
+    width: 100%;
 }
  
 </style>

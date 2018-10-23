@@ -1,8 +1,8 @@
 <template>
  <div class="home" v-if="data.loading">
-  <div class="search" @click="push('search')">
+  <div class="search" @click="push('search',{},{'event':'eventSearch_click','event_desc':'游戏搜索点击'})">
     <div class="searchbox">
-      <input type="text" placeholder="搜索游戏" class="searchinput">
+      <input type="text" :placeholder="$store.state.searchAdvText" class="searchinput">
       <img src="../../assets/img/search.png" class="searchimg" alt="">
     </div>
   </div>
@@ -10,45 +10,58 @@
 <div class="recegame f1" v-if=" data.res.recPlay.length>0">
   <div class="title">最近在玩</div>
   <swiper :options="swiperOption1" ref="swiper1">
-    <swiper-slide v-for="(item,index) in data.res.recPlay" :key="index"><item1 :type="'recPlay'+index" :item="item"></item1></swiper-slide>
+    <swiper-slide v-for="(item,index) in data.res.recPlay" :key="index"><item1 :type="{'event':'recPlay','index':index}" :item="item"></item1></swiper-slide>
   </swiper>
 </div>
+<!-- 游戏类别 -->
+<div class="clas">
+  <!-- <div class="title">游戏类别</div> -->
+  <ul class="clearfix">
+    <li class="fl" @click="push('gameLibrary',{type:1},{'event':'homeCategory1','event_desc':'角色扮演分类'})"><img src="../../assets/img/role.png" alt="">角色</li>
+    <li class="fl" @click="push('gameLibrary',{type:3},{'event':'homeCategory3','event_desc':'模拟经营分类'})"><img src="../../assets/img/simulation.png" alt="">模拟</li>
+    <li class="fl" @click="push('gameLibrary',{type:4},{'event':'homeCategory4','event_desc':'休闲竞技分类'})"><img src="../../assets/img/leisure.png" alt="">休闲</li>
+    <li class="fl" @click="push('gameLibrary',{type:5},{'event':'homeCategory5','event_desc':'放置挂机分类'})"><img src="../../assets/img/place.png" alt="">放置</li>
+    <li class="fl" @click="push('gameLibrary',{type:2},{'event':'homeCategory2','event_desc':'战争策略分类'})"><img src="../../assets/img/strategy.png" alt="">策略</li>
+  </ul>
+</div>
+
+<!-- 飞火资讯 -->
+<div class="information" @click="push('inforList',{'type':'5|6|26|27','dateFormat':'Y-m-d'},{'event':'information_click','event_desc':'资讯点击'})" v-if="data.res.news">
+  <img src="../../assets/img/feihuoInformation.png" alt="">
+  <swiper :options="swiperOption2" ref="swiper2">
+    <swiper-slide v-for="(item,index) in data.res.news" :key="index">
+      {{item.title}}
+    </swiper-slide>
+  </swiper>
+</div>
+
+ <!-- 最多人玩 -->
+  <div class="f6">
+    <ylList2 :obj="data.res.hotGames.list" :type="2"></ylList2>
+  </div>
 <!-- 轮播图专题 -->
   <div class="f2" v-if="data.res.focusRecInfo.length>0">
     <ylSwiper1 :obj="data.res.focusRecInfo" :type="'focusRecInfo'" ></ylSwiper1>
   </div>
-  <!-- 游戏类别 -->
-  <div class="clas">
-    <div class="title">游戏类别</div>
-    <ul class="clearfix">
-      <li class="fl" @click="push('gameLibrary',{type:1},'homeCategory1')"><img src="../../assets/img/role.png" alt="">角色</li>
-      <li class="fl" @click="push('gameLibrary',{type:3},'homeCategory3')"><img src="../../assets/img/simulation.png" alt="">模拟</li>
-      <li class="fl" @click="push('gameLibrary',{type:4},'homeCategory4')"><img src="../../assets/img/leisure.png" alt="">休闲</li>
-      <li class="fl" @click="push('gameLibrary',{type:5},'homeCategory5')"><img src="../../assets/img/place.png" alt="">放置</li>
-      <li class="fl" @click="push('gameLibrary',{type:2},'homeCategory2')"><img src="../../assets/img/strategy.png" alt="">策略</li>
-    </ul>
-  </div>
-  <!-- 游戏专题1 -->
-  <div class="f3">
-    <ylSwiper2 :obj="data.res.iconSubjectInfo" :type="'iconSubjectInfo'"></ylSwiper2>
-  </div>
-  <!-- 游戏专题2 -->
-  <div class="f4" v-if="data.res.imgSubjectInfo.length>0">
-    <ylList1 :obj="data.res.imgSubjectInfo"></ylList1>
-  </div>
-
-  <!-- 最新游戏 -->
+   <!-- 最新游戏 -->
   <div class="f5">
     <ylList2 :obj="data.res.newGames.list" :type="1"></ylList2>
   </div>
-   <!-- 最多人玩 -->
-  <div class="f6">
-    <ylList2 :obj="data.res.hotGames.list" :type="2"></ylList2>
+
+  <!-- 游戏专题1 -->
+  <div class="f3" v-if="data.res.iconSubjectInfo.hasOwnProperty('relGamesInfo')">
+    <ylSwiper2 :obj="data.res.iconSubjectInfo" :type="'iconSubjectInfo'"></ylSwiper2>
   </div>
+  <!-- 游戏专题2 -->
+  <div class="f4" v-if="data.res.imgSubjectInfo.hasOwnProperty('relGamesInfo')">
+    <ylList1 :obj="data.res.imgSubjectInfo" :type="'gamesInfo'" ></ylList1>
+  </div>
+  
   <!-- 查看全部游戏 -->
-  <div class="f7" @click="push('gameLibrary',{type:1},'homeAll')">
+  <div class="f7" @click="push('gameLibrary',{type:1},{'event':'homeAll','event_desc':'查看全部游戏'})">
     <span>查看全部游戏</span><img src="../../assets/img/right.png" alt="">
   </div>
+  <div class="f8">本站游戏适合18周岁以上人士进入</div>
  </div>
 </template>
 
@@ -83,6 +96,16 @@ export default {
         slidesPerView: 1.1,
         centeredSlides: true,
         spaceBetween: "2.666666%"
+      },
+      swiperOption2: {
+        direction: "vertical",
+        slidesPerView: 2,
+        slidesPerGroup :2,
+        loop: true,
+        autoplay:true,
+        // autoplay:{
+        //   delay:3000
+        // }
       }
     };
   },
@@ -102,9 +125,10 @@ export default {
     pop: function() {
       // alert(1);
     },
-    push: function(path, query = {},type="") {
-      if(path === 'search') MtaH5.clickStat("eventSearch")
-      if(type != '') MtaH5.clickStat(type)
+    push: function(path, query = {},type=null) {
+      if(type){
+        this.$fn.uploadData("H5WeChatHall_"+type.event,"公众号大厅-"+type.event_desc);
+      }
       router.push({ path: path, query: query });
     },
     fetchData: async function() {
@@ -125,6 +149,7 @@ export default {
       this.data.res = e;
       this.data.loading = true;
     });
+    this.$fn.uploadData('H5WeChatHall_eventHome_visit','公众号大厅-游戏页PV');//数据埋点，游戏页 展示量
   },
   computed: {
     swiper() {
@@ -171,6 +196,7 @@ export default {
     }
   }
 }
+.information,
 .clas,
 .f1,
 .f2,
@@ -213,7 +239,7 @@ export default {
 .clas {
   ul {
     display: flex;
-    margin-top: 50px;
+    // margin-top: 50px;
   }
   li {
     flex: 1;
@@ -245,5 +271,29 @@ export default {
   //   width: 52px;
   //   height: 61px;
   // }
+}
+.f8{
+  padding:0 0 40px 0;
+  text-align: center;
+  font-size: 24px;
+  color:#dddddd;
+}
+.information{
+  height: 79px;
+  display: flex;
+  padding: 40px 5%;
+  img{
+    width: 79px;
+    height: 72px;
+    margin-right: 20px;
+  }
+  .swiper-container{
+    flex:1;
+  }
+  .swiper-slide{
+    .ellipsis;
+    color: #555555;
+    font-size: 28px;
+  }
 }
 </style>
